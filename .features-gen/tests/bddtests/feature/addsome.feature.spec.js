@@ -3,8 +3,8 @@ import { test } from "../../../../fixtures/fixture.js";
 
 test.describe("addsome", () => {
 
-  test("assss", async ({ Given, page, ecomLoginPage }) => {
-    await Given("I do something", null, { page, ecomLoginPage });
+  test("assss", async ({ Given, page, loginPage }) => {
+    await Given("I do something", null, { page, loginPage });
   });
 
 });

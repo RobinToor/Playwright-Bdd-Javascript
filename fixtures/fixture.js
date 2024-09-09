@@ -1,19 +1,16 @@
 import { test as base } from 'playwright-bdd';
 import * as Pages from './pages';
 
-
-
- /**
-   * @param {import('@playwright/test').Page} page
-   */
-
-
-const {login } = Pages;
+const {login, common, subscribe, store  } = Pages;
 
 const createTestFunction = (PageClass) => async ({page}, use) =>{
-    await use(new PageClass(page));
+    const instance = new PageClass(page);
+    await use(instance);
 }
 
 export const test = base.extend({
-    ecomLoginPage: createTestFunction(login)
+    loginPage: createTestFunction(login),
+    storePage: createTestFunction(store),
+    subscrbePage: createTestFunction(subscribe),
+    commonMethod: createTestFunction(common)
 });
