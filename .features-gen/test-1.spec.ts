@@ -1,0 +1,34 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('https://letstesttogether.com/store/');
+  await page.locator('#block_frame_latest_2460').getByLabel('View').nth(1).click();
+  await expect(page.getByRole('heading', { name: 'Total Price: $' }).locator('span')).toBeVisible();
+  await page.getByRole('heading', { name: 'Total Price: $' }).locator('span').click();
+  await page.getByRole('link', { name: ' Buy Now' }).click();
+  await page.getByPlaceholder('First Name:').click();
+  await page.getByPlaceholder('First Name:').fill('ss');
+  await page.getByPlaceholder('Last Name:').click();
+  await page.getByPlaceholder('Last Name:').fill('dd');
+  await page.getByPlaceholder('Address 1:').click();
+  await page.getByPlaceholder('Address 1:').fill('4 biscay grove, Lyndhurst');
+  await page.getByPlaceholder('City:').click();
+  await page.getByPlaceholder('City:').fill('Melbourne');
+  await page.getByPlaceholder('ZIP/Post Code:').click();
+  await page.getByPlaceholder('ZIP/Post Code:').fill('3975');
+  await page.getByLabel('zone').selectOption('3671');
+  await page.getByPlaceholder('Your email').click();
+  await page.getByPlaceholder('Your email').fill('ee@email.com');
+  await page.getByPlaceholder('Your phone number').click();
+  await page.getByPlaceholder('Your phone number').fill('eqweqwe');
+  await page.getByPlaceholder('Your phone number').click();
+  await page.getByPlaceholder('Your phone number').click();
+  await page.getByPlaceholder('Your phone number').fill('2324244');
+  await expect(page.getByRole('tab', { name: '   Payment Address' })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('tab', { name: '   I am new customer' })).toBeVisible();
+  await page.getByText('Flat Shipping Rate: $').click();
+  await page.locator('[id="cart_details\\ d-flex\\ flex-column\\ mx-sm-auto"]').getByText('Retail 8.5%: $').click();
+  await page.getByText('Total: $150.65').click();
+  await page.locator('[id="cart_details\\ d-flex\\ flex-column\\ mx-sm-auto"]').getByText('Sub-Total: $').click();
+});

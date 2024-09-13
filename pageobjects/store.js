@@ -41,7 +41,11 @@ export class store
 
     async NavigateToTheWebsite()
     {
-        await this.page.goto("https://LetsTestTogether.com/store")
+        await Promise.all([
+            this.page.goto("https://LetsTestTogether.com/store"),
+            this.page.waitForLoadState('domcontentloaded')
+        ]
+        );
     }
 
 }

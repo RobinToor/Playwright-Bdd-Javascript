@@ -9,6 +9,26 @@ export class common
     constructor(page)
     {
         this.page = page;
+        this.btnSpecials = this.page.locator("//a[@id='menu_specials']");
+        this.btnBuyNow = this.page.locator("//a[@id='product_buy_now_btn']");
+        this.btnContinue = this.page.getByRole('button', { name: 'Continue' });
+    }
+
+    async ClickButton(buttonName)
+    {
+        let lowercaseString = buttonName.toLowerCase();
+        if(lowercaseString.includes("specials"))
+        {
+            await this.btnSpecials.click();
+        }
+        if(lowercaseString.includes("buy now"))
+        {
+            await this.btnBuyNow.click();
+        }
+        if(lowercaseString.includes("continue"))
+        {
+                await this.btnContinue.click();
+        }
     }
 
     async ValidateHeadingOnPage(headingText)
@@ -30,7 +50,44 @@ export class common
         if(truthyValues.includes(strValue)) return true;
         if(falsyValues.includes(strValue)) return false;
 
-        throw new Error('Cannot convert "${strValue} to boolean');
+        throw new Error(`Cannot convert ${strValue} to boolean`);
     }
 
+    //Select option by exact text from the dropdown select options
+    async SelectOptionByTextFromDropdown(elementLocator, option)
+    {
+        const dropdown = await this.page.locator(`${elementLocator}`);
+        await dropdown.selectText(option);
+    }
+    
+    // Ensure if radio button is checked by passing webElement.
+    //if not checked then click to check it.
+    async EnsureRadioButtonChecked(radioButtonSelector) {
+        const isChecked = await this.page.isChecked(radioButtonSelector);
+        // If not checked, click to check it
+        if (!isChecked) {
+            await this.page.click(radioButtonSelector);
+        }
+    }
+
+    /**
+     * Converts string to 2 decimal point number
+     * @param {string} number 
+     * @returns {Float32Array} number with 2 decimal point
+     */
+    async ConvertStringTo2DecimalPoint(stringNum)
+    {
+        stringNum = stringNum.replace(/[^0-9.-]+/g,"");
+        stringNum =  parseFloat(stringNum).toFixed(2);
+        return stringNum
+    }
+    
+    async WaitForPageLoadState(variable)
+    {
+        Promise.all(
+            [
+                this.page.waitForLoadState(`${variable}`)
+            ]
+        );
+    }
 }

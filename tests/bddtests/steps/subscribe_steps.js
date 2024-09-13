@@ -1,6 +1,5 @@
 import { createBdd } from 'playwright-bdd';
 import { test } from '../../../fixtures/fixture';
-import { store } from '../../../pageobjects/store';
 
 const { Before, After, Given, When, Then } = createBdd(test);
 
