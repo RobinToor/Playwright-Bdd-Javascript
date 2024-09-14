@@ -39,12 +39,40 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
     headless:false,
     screenshot: 'on',
+    sloMo: 1500,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    browserName: 'chromium',
+    launchOptions: {
+      args:['--start-maximixed'],
+    }
   },
 
   /* Configure projects for major browsers */
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1920, height: 1080 },
+      },
+    },
+    {
+      name: 'firefox',
+      use: {
+        browserName: 'firefox',
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'webkit',
+      use: {
+        browserName: 'webkit',
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+  ],
  
   /* Run your local dev server before starting the tests */
   // webServer: {

@@ -35,10 +35,10 @@ export class paymentAddress
         await this.txtbxaddress1.fill(dataTable.address1);
         await this.txtbxcity.fill(dataTable.city);
         await this.txtbxzipcode.fill(dataTable.zipCode);
+        await commonFunctions.SelectOptionByTextFromDropdown("#country_id", dataTable.country);
         await commonFunctions.SelectOptionByTextFromDropdown("#zone_id",dataTable.state);
-        await commonFunctions.SelectOptionByTextFromDropdown("#zone_id", dataTable.country);
         await this.emailaddress.fill(dataTable.email);
         await this.phonenumber.fill(dataTable.phoneNumber);
-        await expect(page.getByRole('tab', { name: '   Payment Address' })).toBeVisible();
+        await expect(this.page.getByRole('tab', { name: '   Payment Address' })).toBeVisible();
     }
 }

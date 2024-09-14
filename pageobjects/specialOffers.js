@@ -25,6 +25,8 @@ export class specialoffers
             if(actualproductname == expectedproductName)
             {
                 await this.productcards.nth(i).locator("//*[@class='prod-img position-relative overflow-hidden']").hover();
+                await this.productcards.nth(i).locator("//*[@class='bi bi-eye']").waitFor({state:"visible"});
+                await this.productcards.nth(i).locator("//*[@class='bi bi-eye']").hover();
                 await this.productcards.nth(i).locator("//*[@class='bi bi-eye']").click();
                 break;
             }            

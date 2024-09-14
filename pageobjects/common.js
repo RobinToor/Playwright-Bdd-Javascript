@@ -10,7 +10,7 @@ export class common
     {
         this.page = page;
         this.btnSpecials = this.page.locator("//a[@id='menu_specials']");
-        this.btnBuyNow = this.page.locator("//a[@id='product_buy_now_btn']");
+        this.btnBuyNow = this.page.locator("#product_buy_now_btn");
         this.btnContinue = this.page.getByRole('button', { name: 'Continue' });
     }
 
@@ -21,19 +21,33 @@ export class common
         {
             await this.btnSpecials.click();
         }
-        if(lowercaseString.includes("buy now"))
+        else if(lowercaseString.includes("buy now"))
         {
             await this.btnBuyNow.click();
         }
-        if(lowercaseString.includes("continue"))
+        else
         {
-                await this.btnContinue.click();
+            await this.page.getByRole('button', { name: `${buttonName}` }).click();
         }
     }
 
     async ValidateHeadingOnPage(headingText)
     {
-        expect(await this.page.getByRole('heading', { name: headingText })).toBeVisible();
+        Promise.all(
+            [
+                this.page.waitForLoadState('domcontentloaded')
+            ]
+        );
+
+        try {
+            const heading = await this.page.getByRole('heading', { name: headingText });
+            await heading.waitFor({ state: 'visible', timeout: 10000 });
+            expect(heading).toBeVisible();
+        } catch (error) {
+            console.error(`Heading "${headingText}" not found. Check page content and selector.`);
+            throw error;
+        }
+
     }
 
     async ValidateErrorTextMessageOnPage(textMessage)
@@ -41,6 +55,11 @@ export class common
         expect(await this.page.getByText(textMessage)).toBeVisible();
     }
 
+    /**
+     * 
+     * @param {string} strValue Convert string value to boolean 
+     * @returns return boolean output
+     */
     async stringToBoolean(strValue) 
     {
         const truthyValues = ['true', 'yes', '1', 'y'];
@@ -53,11 +72,15 @@ export class common
         throw new Error(`Cannot convert ${strValue} to boolean`);
     }
 
-    //Select option by exact text from the dropdown select options
+    /**
+     * 
+     * @param {string} elementLocator web element in a string format
+     * @param {string} option option/ name to select from the dropdown
+     */
     async SelectOptionByTextFromDropdown(elementLocator, option)
     {
         const dropdown = await this.page.locator(`${elementLocator}`);
-        await dropdown.selectText(option);
+        await dropdown.selectOption({label: `${option}`});
     }
     
     // Ensure if radio button is checked by passing webElement.
@@ -90,4 +113,9 @@ export class common
             ]
         );
     }
+    async WaitForPageNavigation()
+        {
+            // Wait for the navigation or changes to complete
+            await this.page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+        }
 }

@@ -25,7 +25,7 @@ export class fastCheckout
     async verifyOrderSummary(deliveryMethod, productInfoData)
     {
         let additionalCost;
-        if(deliveryMethod.toLowerCase().includes("Shipping") )
+        if(deliveryMethod.toLowerCase().includes("shipping") )
         {
             additionalCost = await this.flatShippingRate.textContent();
         }
@@ -39,14 +39,16 @@ export class fastCheckout
         let totalPrice = productInfoData.totalPrice;
         totalPrice = await commonFunctions.ConvertStringTo2DecimalPoint(totalPrice);
 
-        let subTotalPrice = this.subTotal.textContent();
+        let subTotalPrice = await this.subTotal.textContent();
         subTotalPrice = await commonFunctions.ConvertStringTo2DecimalPoint(subTotalPrice);
         //Verify total price value by comparing with subtotal
         expect(subTotalPrice).toBe(totalPrice);
         
-        let totalPriceWithDelivery = this.total.textContent();
+        let totalPriceWithDelivery = await this.total.textContent();
         totalPriceWithDelivery = await commonFunctions.ConvertStringTo2DecimalPoint(totalPriceWithDelivery);
+        
         //verify total by adding additional costs in it
-        expect(subTotalPrice + additionalCost).toBe(totalPriceWithDelivery);
+        let actualBuyingPrice = (parseFloat(subTotalPrice)  + parseFloat(additionalCost)).toFixed(2);
+        expect(actualBuyingPrice).toBe(totalPriceWithDelivery);
     }
 }

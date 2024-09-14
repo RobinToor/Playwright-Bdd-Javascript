@@ -23,6 +23,8 @@ export class productInfo
     //Update product qunatity for the order
     async UpdateQuantity(quantity)
     {
+        await commonFunctions.WaitForPageLoadState('domcontentloaded');
+        await commonFunctions.WaitForPageLoadState('networkidle');
         requiredQty =  parseInt(quantity);
         const defaultQty = 1;
         if(requiredQty>defaultQty)
@@ -32,28 +34,40 @@ export class productInfo
             //set loop to click + buttton to increase qty
             for(let i=0; i < difference; i++)
             {
+                let initialText = await this/this.productPrice.textContent();
+                await this.plusQuantity.waitFor({state:"visible"});
                 await this.plusQuantity.click();
+                Promise.all([
+                    await this.page.waitForResponse(response => 
+                        response.url().includes('/store/index.php?rt=r/product/product/calculateTotal') && response.status() === 200
+                    ),
+                    await this.page.waitForTimeout(2500),
+                    // Wait for the content of that element to be updated
+                    await this.page.waitForFunction((initialText) => {
+                    const totalPriceElement = document.querySelector('.total-price');
+                    return totalPriceElement && totalPriceElement.textContent !== initialText; 
+                    }),
+                ]);               
             }
         }
+    //     // Wait for the content of that element to be updated
+    //     await this.page.waitForFunction(() => {
+    //     const totalPriceElement = document.querySelector('.total-price');
+    //     return totalPriceElement && totalPriceElement.textContent.trim() !== ''; 
+    // });
     }
 
     //Verify the Total price of the product
     async VerifyTotalPrice()
     {
-        Promise.all([
-            this.page.waitForLoadState('networkidle')
-        ]);
+        await commonFunctions.WaitForPageLoadState('domcontentloaded');
         let priceOfProduct = await this.productPrice.textContent();
         priceOfProduct = await commonFunctions.ConvertStringTo2DecimalPoint(priceOfProduct);
-        //priceOfProduct = priceOfProduct.replace(/[^0-9.-]+/g,"");
-        //priceOfProduct =  parseFloat(priceOfProduct).toFixed(2);
         
         const expectedPrice = parseFloat(priceOfProduct * requiredQty).toFixed(2);
         
         let actualTotalPrice =  await this.totalPrice.textContent();
         actualTotalPrice = await commonFunctions.ConvertStringTo2DecimalPoint(actualTotalPrice);
-        // actualTotalPrice = actualTotalPrice.replace(/[^0-9.-]+/g,"");
-        // actualTotalPrice =  parseFloat(actualTotalPrice).toFixed(2);
 
         await expect(actualTotalPrice).toBe(expectedPrice);
     }
