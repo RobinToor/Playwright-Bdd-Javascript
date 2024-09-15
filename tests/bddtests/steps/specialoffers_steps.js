@@ -1,11 +1,11 @@
 import { createBdd, DataTable } from 'playwright-bdd';
 import { test } from '../../../fixtures/fixture';
+import {getTempFilePath, createTempFile, deleteTempFile, } from '../../../utilities/tempfileutils'
 import fs from 'fs';
 import path from 'path';
+import { scenarioContext } from '../context';
 let productInfoFilePath = path.join(__dirname, '../../../utilities/testdata/productInfo.json');
-let tesDataProductInfoFilePath; // The path of the temporary data file
 let productData;
-
 const { Given, When, Then, dataTable  } = createBdd(test);
 
 
@@ -19,19 +19,20 @@ const { Given, When, Then, dataTable  } = createBdd(test);
   
 
   When('Note details of the product', async ({productInfo}) => {
-
-    // Create a temporary instance of the productInfo.json file with a unique name
-    tesDataProductInfoFilePath = path.join(__dirname, `../../../utilities/testdata/productInfo_${Date.now()}.json`);
-    
+   
     if(fs.existsSync(productInfoFilePath))
     {
-      //create a copy of the original file to use for test
-      fs.copyFileSync(productInfoFilePath, tesDataProductInfoFilePath);
+      // Get temporary file path and copy  test data from original file to use
+      scenarioContext.tempFilePath = getTempFilePath('productInfo.json');
+      createTempFile(productInfoFilePath,scenarioContext.tempFilePath);
+      
       //Load the data from the new instance
-      productData = JSON.parse(fs.readFileSync(tesDataProductInfoFilePath, 'utf-8'));
+      productData = JSON.parse(fs.readFileSync(scenarioContext.tempFilePath, 'utf-8'));
       productData = await productInfo.NoteProductInfo(productData);
+      
       // Save the modified data back to the new Temp file
-      fs.writeFileSync(tesDataProductInfoFilePath, JSON.stringify(productData,null, 2));
+      fs.writeFileSync(scenarioContext.tempFilePath, JSON.stringify(productData,null, 2));
+      console.log(scenarioContext.tempFilePath);
     }
     else
     {
@@ -54,7 +55,7 @@ const { Given, When, Then, dataTable  } = createBdd(test);
   });
   
   When('Verify Order summary', async ({fastCheckout}) => {
-    const updatedProducInfoData = JSON.parse(fs.readFileSync(tesDataProductInfoFilePath, 'utf-8'));
+    const updatedProducInfoData = JSON.parse(fs.readFileSync(scenarioContext.tempFilePath, 'utf-8'));
     await fastCheckout.verifyOrderSummary("Flat Shipping", updatedProducInfoData);
   });
   

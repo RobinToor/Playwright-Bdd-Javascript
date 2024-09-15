@@ -5,7 +5,7 @@ test.describe("SpecialOffers", () => {
 
   test.describe("Validate if user is able to buy product from special offers without login", () => {
 
-    test("Example #1", async ({ Given, storePage, When, commonMethod, And, specialoffers, productInfo, paymentAddress, fastCheckout, Then }) => {
+    test("Example #1", { tag: ["@specialOffers"] }, async ({ Given, storePage, When, commonMethod, And, specialoffers, productInfo, paymentAddress, fastCheckout, Then }) => {
       await Given("I navigate to LetsTestTogether Store site", null, { storePage });
       await When("Click button \"Specials\"", null, { commonMethod });
       await And("Verify the heading \"Special Offers\" on the page", null, { commonMethod });
@@ -35,5 +35,5 @@ test.use({
 });
 
 const bddFileMeta = {
-  "Validate if user is able to buy product from special offers without login|Example #1": {"pickleLocation":"22:13"},
+  "Validate if user is able to buy product from special offers without login|Example #1": {"pickleLocation":"22:13","tags":["@specialOffers"]},
 };

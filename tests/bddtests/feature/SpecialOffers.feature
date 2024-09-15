@@ -1,5 +1,5 @@
 Feature: SpecialOffers
-    
+    @specialOffers
     Scenario Outline: Validate if user is able to buy product from special offers without login
         Given I navigate to LetsTestTogether Store site
         When Click button "Specials"
