@@ -1,5 +1,5 @@
 {
-  "name": "dummy",
+  "name": "Playwright-BDD-Javascript",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,13 +7,11 @@
     "test": "npm run bddgen && npm run playwright-test",
     "bddgen": "npx bddgen",
     "clean": "rmdir /S /Q .features-gen",
-    "playwright-test": "npx playwright test --reporter=html,list --workers 1 --headed",
-    "qa-env": "powershell -Command \"$env:ENV='qa'; npx bddgen; npx playwright test",
-    "dev-env": "powershell -Command \"$env:ENV='dev'; npx bddgen; npx playwright test",
-    "prod-env": "powershell -Command \"$env:ENV='prod'; npx bddgen; npx playwright test",
+    "playwright-test": "npx playwright test --project=chromium --reporter=html,list --workers 1 --headed",
+    "qa-env": "powershell -Command \"$env:ENV='qa'; npx bddgen; npx playwright test\"",
+    "dev-env": "powershell -Command \"$env:ENV='dev'; npx bddgen; npx playwright test\"",
     "qa-test": "npx bddgen && cross-env ENV=qa npx playwright test",
-    "dev-test": "npx bddgen && cross-env ENV=dev npx playwright test --headed",
-    "prod-test": "npx bddgen && cross-env ENV=prod npx playwright test --headed"
+    "dev-test": "npx bddgen && cross-env ENV=dev npx playwright test --headed"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +20,8 @@
     "@playwright/test": "^1.46.1",
     "@types/node": "^22.5.4",
     "playwright-bdd": "^7.2.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }

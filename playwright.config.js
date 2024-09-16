@@ -1,10 +1,16 @@
 // @ts-check
 import { defineConfig } from '@playwright/test';
 import { defineBddConfig } from 'playwright-bdd';
+import dotenv from 'dotenv';
 
 const testDir = defineBddConfig({
   features: 'tests/bddtests/feature/*.feature',
   steps: ['tests/bddtests/steps/*.js', './fixtures/fixture.js', 'tests/bddtests/hooks.js']
+});
+
+
+dotenv.config({
+  path: `./env/.env.${process.env.ENV || 'dev'}`
 });
 
 /**
@@ -40,10 +46,9 @@ export default defineConfig({
     headless:false,
     screenshot: 'on',
     sloMo: 1500,
-
+    video: 'on-first-retry',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    browserName: 'chromium',
     launchOptions: {
       args:['--start-maximixed'],
     }
