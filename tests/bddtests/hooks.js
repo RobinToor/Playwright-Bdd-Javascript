@@ -1,9 +1,10 @@
 import { createBdd } from "playwright-bdd";
-import path from 'path';
 import {scenarioContext} from './context';
 import {deleteTempFile} from '../../utilities/tempfileutils';
+const {test} = require('@playwright/test');
 const {Before, After} = createBdd();
 let tempFilePath;
+
 
 // Before hook for scenarios tagged
 Before({ tags: '@specialOffers' }, async function () {
@@ -11,6 +12,9 @@ Before({ tags: '@specialOffers' }, async function () {
   scenarioContext.tempFilePath = tempFilePath;    // Store tempFilePath in scenario context
 });
 
+Before({tags: '@orderHistory'}), async function() {
+ await browser.newContext();
+}
 // After hook for scenarios tagged
 After({ tags: '@specialOffers' }, async function () {
   console.log('Running After hook for @specialOffers scenario...');

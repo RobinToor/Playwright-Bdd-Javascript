@@ -10,22 +10,24 @@ export class login {
   
   constructor(page) {
     this.page = page;
-    this.my_account_Btn = page.getByRole('button', { name: 'My account' });
-    this.email_box = page.getByPlaceholder('E-Mail Address');
-    this.password_box = page.getByPlaceholder('Password');
-    this.submit_btn = page.locator("input[value='Login']");
+    this.loginName_box = page.getByLabel('Login Name:');
+    this.password.box = page.getByLabel('Password:');
+    this.submit_btn = page.getByRole('button', { name: ' Login' });
   }
 
-  async navigateToUrl(url) {
+  async navigateToAccountLogin(url) {
     await this.page.goto(url);
   }
 
-  async clickOnMyAccount() {
-    await this.my_account_Btn.click();
+  async accountLogin()
+  {
+    await this.enterEmailAddress();
+    await this.enterPassword();
+    await this.clickOnSubmit();
   }
 
-  async enterEmailAddress(emailAddress) {
-    await this.email_box.fill(emailAddress);
+  async enterEmailAddress(loginName) {
+    await this.loginName_box.fill(loginName);
   }
 
   async enterPassword(password) {
