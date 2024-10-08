@@ -34,7 +34,7 @@ export class productInfo
             //set loop to click + buttton to increase qty
             for(let i=0; i < difference; i++)
             {
-                let initialText = await this/this.productPrice.textContent();
+                let initialText = await this.productPrice.textContent();
                 await this.plusQuantity.waitFor({state:"visible"});
                 await this.plusQuantity.click();
                 Promise.all([
@@ -61,10 +61,10 @@ export class productInfo
     async VerifyTotalPrice()
     {
         await commonFunctions.WaitForPageLoadState('domcontentloaded');
-        let priceOfProduct = await this.productPrice.textContent();
-        priceOfProduct = await commonFunctions.ConvertStringTo2DecimalPoint(priceOfProduct);
+        let priceOfProductString = await this.productPrice.textContent();
+        let priceOfProduct = await commonFunctions.ConvertStringTo2DecimalPoint(priceOfProductString);
         
-        const expectedPrice = parseFloat(priceOfProduct * requiredQty).toFixed(2);
+        let expectedPrice = parseFloat(priceOfProduct * requiredQty).toFixed(2);
         
         let actualTotalPrice =  await this.totalPrice.textContent();
         actualTotalPrice = await commonFunctions.ConvertStringTo2DecimalPoint(actualTotalPrice);

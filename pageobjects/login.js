@@ -1,4 +1,7 @@
 import { expect } from '@playwright/test';
+require('dotenv').config;
+const loginName = process.env.EMAIL;
+const password = process.env.PASSWORD;
 
 export class login {
 
@@ -11,7 +14,7 @@ export class login {
   constructor(page) {
     this.page = page;
     this.loginName_box = page.getByLabel('Login Name:');
-    this.password.box = page.getByLabel('Password:');
+    this.password_box = page.getByLabel('Password:');
     this.submit_btn = page.getByRole('button', { name: ' Login' });
   }
 
@@ -19,10 +22,13 @@ export class login {
     await this.page.goto(url);
   }
 
+  /**
+   * Login to the existing account
+   */
   async accountLogin()
   {
-    await this.enterEmailAddress();
-    await this.enterPassword();
+    await this.enterEmailAddress(loginName);
+    await this.enterPassword(password);
     await this.clickOnSubmit();
   }
 

@@ -10,7 +10,7 @@ const testDir = defineBddConfig({
 
 
 dotenv.config({
-  path: `./env/.env.${process.env.ENV || 'dev'}`
+  path: `./env/.env.${process.env.ENV || 'test'}`
 });
 
 /**

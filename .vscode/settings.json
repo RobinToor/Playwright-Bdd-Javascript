@@ -1,3 +1,4 @@
 {
-    "cucumberautocomplete.steps": ["tests/bddtests/steps/*.js"]    
+    "cucumberautocomplete.steps": ["tests/bddtests/steps/*.js"],    
+    "javascript.implicitProjectConfig.checkJs": true
 }

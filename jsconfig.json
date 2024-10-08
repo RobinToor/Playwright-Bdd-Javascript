@@ -1,11 +1,9 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "checkJs": true,   // Enables checking in JavaScript files
-      "module": "commonjs"
-    },
-    "include": [
-      "src/**/*.js",     // Adjust to your project structure
-      "test/**/*.js"
-    ]
-  }
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "checkJs": true,  // This enables type checking and IntelliSense in JS files
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules"]
+}
