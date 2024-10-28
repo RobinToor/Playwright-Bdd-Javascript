@@ -1,10 +1,12 @@
-// @ts-check
+
 import { defineConfig } from '@playwright/test';
 import { defineBddConfig } from 'playwright-bdd';
 import dotenv from 'dotenv';
 
 const testDir = defineBddConfig({
   features: 'tests/bddtests/feature/*.feature',
+  //steps: ['tests/bddtests/steps/*.js', 'tests/bddtests/hooks.js'],
+  //importTestFrom:  './tests/bddtests/hooks.js'
   steps: ['tests/bddtests/steps/*.js', './fixtures/fixture.js', 'tests/bddtests/hooks.js']
 });
 

@@ -3,14 +3,13 @@ require('dotenv').config;
 const loginName = process.env.EMAIL;
 const password = process.env.PASSWORD;
 
-export class login {
+  export class LoginPage {
 
-  /**
-   * @param {import('@playwright/test').Page} page
-   */
+    /**
+     * @class LoginPage
+     * @param {import('@playwright/test').Page} page
+     */  
 
-   /** @type {import('playwright').Page} */
-  
   constructor(page) {
     this.page = page;
     this.loginName_box = page.getByLabel('Login Name:');
@@ -18,6 +17,10 @@ export class login {
     this.submit_btn = page.getByRole('button', { name: ' Login' });
   }
 
+  /**
+   * navigate to url
+   * @param {string} url 
+   */
   async navigateToAccountLogin(url) {
     await this.page.goto(url);
   }

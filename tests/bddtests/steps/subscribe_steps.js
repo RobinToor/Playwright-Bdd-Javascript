@@ -1,34 +1,30 @@
 import { createBdd } from 'playwright-bdd';
 import { test } from '../../../fixtures/fixture';
+import { getPomManager } from '../hooks';
+const { Given, When, Then } = createBdd(test);
+const pageObjectManager = getPomManager(); 
 
-const { Before, After, Given, When, Then } = createBdd(test);
 
-// 1. Missing step definition for "tests\bddtests\feature\Subscribe.feature:4:5"
-Given('I navigate to LetsTestTogether Store site' , async ({storePage}) => {
-    await storePage.NavigateToTheWebsite();
+  Given('I navigate to LetsTestTogether Store site' , async ({}) => {
+    await pageObjectManager.getStorePage().NavigateToTheWebsite();
+  });
+
+  When('I enter {string} to subscribe for newsletter', async ( {}, emailAddress) => {
+     await pageObjectManager.getStorePage().EnterdetailsToSubscribe(emailAddress);
   });
   
-  // 2. Missing step definition for "tests\bddtests\feature\Subscribe.feature:5:5"
-  When('I enter {string} to subscribe for newsletter', async ({storePage}, emailAddress) => {
-     await storePage.EnterdetailsToSubscribe(emailAddress);
+  When('Click {string}', async ({}, buttonName) => {
+    await getPomManager().getStorePage().ClickButton(buttonName)
   });
   
-  // 3. Missing step definition for "tests\bddtests\feature\Subscribe.feature:6:5"
-  When('Click {string}', async ({storePage}, buttonName) => {
-    await storePage.ClickButton(buttonName);
+  When('Verify the heading {string} on the page', async ({}, headingText) => {
+    await getPomManager().getCommonMethods().ValidateHeadingOnPage(headingText)
   });
   
-  // 4. Missing step definition for "tests\bddtests\feature\Subscribe.feature:7:5"
-  When('Verify the heading {string} on the page', async ({commonMethod}, headingText) => {
-    await commonMethod.ValidateHeadingOnPage(headingText);
+  When('Fill the infromation {string}, {string}, {string}, {string} to subscribe and continue', async ({}, firstName, lastName, captchaCode, isCaptchaValid) => {
+    await getPomManager().getSubscribePage().FillInfoToSubscribe(firstName,lastName,captchaCode,isCaptchaValid);
   });
   
-  // 5. Missing step definition for "tests\bddtests\feature\Subscribe.feature:8:5"
-  When('Fill the infromation {string}, {string}, {string}, {string} to subscribe and continue', async ({subscrbePage}, firstName, lastName, captchaCode, isCaptchaValid) => {
-    await subscrbePage.FillInfoToSubscribe(firstName,lastName,captchaCode,isCaptchaValid);
-  });
-  
-  // 6. Missing step definition for "tests\bddtests\feature\Subscribe.feature:9:5"
-  Then('I should see an error text message {string}', async ({commonMethod}, textMessage) => {
-    await commonMethod.ValidateErrorTextMessageOnPage(textMessage);
+  Then('I should see an error text message {string}', async ({}, textMessage) => {
+    await getPomManager().getCommonMethods().ValidateErrorTextMessageOnPage(textMessage);
   });

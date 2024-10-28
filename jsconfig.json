@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "es6",
     "module": "commonjs",
-    "checkJs": true,  // This enables type checking and IntelliSense in JS files
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "allowJs": true,
+    "allowSyntheticDefaultImports" :false,
+    "disableSizeLimit": false
   },
-  "exclude": ["node_modules"]
+  "include": [
+      "**/*.js",  // Include all JS files in the project
+      "fixtures/*.js",  // Adjust for specific folders as needed
+      "pageobjects/*.js",
+    ],
+    "exclude": ["node_modules"]
 }

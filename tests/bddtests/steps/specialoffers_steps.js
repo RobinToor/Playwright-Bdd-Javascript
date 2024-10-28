@@ -1,24 +1,25 @@
-import { createBdd, DataTable } from 'playwright-bdd';
+import { createBdd } from 'playwright-bdd';
 import { test } from '../../../fixtures/fixture';
 import {getTempFilePath, createTempFile, deleteTempFile, } from '../../../utilities/tempfileutils'
 import fs from 'fs';
 import path from 'path';
 import { scenarioContext } from '../context';
+import { getPomManager } from '../hooks';
 let productInfoFilePath = path.join(__dirname, '../../../utilities/testdata/productInfo.json');
 let productData;
-const { Given, When, Then, dataTable  } = createBdd(test);
+const { Given, When, Then } = createBdd(test);
 
 
-  When('Click button {string}', async ({commonMethod}, buttonName) => {
-    await commonMethod.ClickButton(buttonName);
+  When('Click button {string}', async ({}, buttonName) => {
+    await getPomManager().getCommonMethods().ClickButton(buttonName);
   });
   
-  When('Select a product {string} to view', async ({specialoffers}, productName) => {
-    await specialoffers.SelectProductToView(productName);
+  When('Select a product {string} to view', async ({}, productName) => {
+    await getPomManager().getSpecialOfferPage().SelectProductToView(productName);
   });
   
 
-  When('Note details of the product', async ({productInfo}) => {
+  When('Note details of the product', async ({}, productInfo) => {
    
     if(fs.existsSync(productInfoFilePath))
     {
@@ -40,30 +41,30 @@ const { Given, When, Then, dataTable  } = createBdd(test);
     }    
   });
   
-  When('Set quantity {string} to buy', async ({productInfo}, quantity) => {
-    await productInfo.UpdateQuantity(quantity);
+  When('Set quantity {string} to buy', async ({}, quantity) => {
+    await getPomManager().getProductInfoPage().UpdateQuantity(quantity);
   });
   
-  When('Verify the total price', async ({productInfo}) => {
-    await productInfo.VerifyTotalPrice();
+  When('Verify the total price', async ({}) => {
+    await getPomManager().getProductInfoPage().VerifyTotalPrice();
   });
   
-  When('Fill in the payment address for the order:', async ({paymentAddress}, dataTable) => {
+  When('Fill in the payment address for the order:', async ({}, dataTable) => {
     const rawdata = dataTable.hashes();
     const paymentAddressData = rawdata[0];
-    await paymentAddress.FillPaymentAddressInfo(paymentAddressData);
+    await getPomManager().getPaymentAddressPage().FillPaymentAddressInfo(paymentAddressData);
   });
   
-  When('Verify Order summary', async ({fastCheckout}) => {
+  When('Verify Order summary', async ({}) => {
     const updatedProducInfoData = JSON.parse(fs.readFileSync(scenarioContext.tempFilePath, 'utf-8'));
-    await fastCheckout.verifyOrderSummary("Flat Shipping", updatedProducInfoData);
+    await getPomManager().getFastCheckoutPage().verifyOrderSummary("Flat Shipping", updatedProducInfoData);
   });
   
-  When('Confirm Order as a new customer', async ({commonMethod}) => {
-    await commonMethod.ClickButton("Confirm order");
+  When('Confirm Order as a new customer', async ({}) => {
+    await getPomManager().getCommonMethods().ClickButton("Confirm order");
   });
   
-  Then('Order should be completed', async ({commonMethod}) => {
-    await commonMethod.WaitForPageNavigation();
-    await commonMethod.ValidateHeadingOnPage("order is completed!");
+  Then('Order should be completed', async ({}) => {
+    await getPomManager().getCommonMethods().WaitForPageNavigation();
+    await getPomManager().getCommonMethods().ValidateHeadingOnPage("order is completed!");
   });
